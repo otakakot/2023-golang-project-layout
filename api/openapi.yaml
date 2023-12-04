@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: TODO Application API
+  description: This is a sample server for a TODO application.
+  version: 1.0.0
+  contact:
+    email: kotaro.otaka@example.com
+servers:
+  - url: http://localhost:8080
+    description: localhost server
+tags:
+  - name: Todo
+    description: Operations about TODO
+paths:
+  /todos:
+    get:
+      tags:
+        - Todo
+      summary: Get all TODO items
+      description: Get all TODO items
+      operationId: listTodos
+      responses:
+        '200':
+          description: A list of TODO items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Todo'
+    post:
+      tags:
+        - Todo
+      summary: Create a new TODO item
+      description: Create a new TODO item
+      operationId: createTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodoRequest'
+      responses:
+        '201':
+          description: Created TODO item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+  /todos/{id}:
+    get:
+      tags:
+        - Todo
+      summary: Get a specific TODO item
+      description: Get a specific TODO item
+      operationId: getTodo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single TODO item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    put:
+      tags:
+        - Todo
+      summary: Update a specific TODO item
+      description: Update a specific TODO item
+      operationId: updateTodo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTodoRequest'
+      responses:
+        '200':
+          description: Updated TODO item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+    delete:
+      tags:
+        - Todo
+      summary: Delete a specific TODO item
+      description: Delete a specific TODO item
+      operationId: deleteTodo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted TODO item
+components:
+  schemas:
+    Todo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the TODO item
+        title:
+          type: string
+          description: The title of the TODO item
+        completed:
+          type: boolean
+          description: Whether the TODO item is completed or not
+        created_at:
+          type: string
+          format: date-time
+          description: The date and time when the TODO item was created
+        updated_at:
+          type: string
+          format: date-time
+          description: The date and time when the TODO item was updated
+      required:
+        - id
+        - title
+        - completed
+        - created_at
+        - updated_at
+    CreateTodoRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the TODO item
+      required:
+        - title
+    UpdateTodoRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the TODO item
+        completed:
+          type: boolean
+          description: Whether the TODO item is completed or not
+      required:
+        - title
+        - completed
